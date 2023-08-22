@@ -3,19 +3,21 @@ admin:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   enabled: true
   http:
-    enabled: false
+    enabled: true
   ingress:
     annotations:
+      cert-manager.io/acme-challenge-type: http01
+      cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/app-root: /
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: /
+      # nginx.ingress.kubernetes.io/rewrite-target: /
     enabled: true
     ingressClassName: nginx
-    hostname: kong.smigula.io
-    path: /api
-    tls: kong-smigula-io-tls
+    hostname: admin.kong.smigula.io
+    path: /
+    tls: admin-kong-smigula-io
   tls:
     containerPort: 8444
     enabled: true
@@ -87,13 +89,13 @@ enterprise:
     enabled: true
 env:
   admin_access_log: /dev/stdout
-  admin_gui_api_url: https://kong.smigula.io/api
+  admin_gui_api_url: https://admin.kong.smigula.io/
   admin_error_log: /dev/stdout
   admin_gui_access_log: /dev/stdout
   admin_gui_error_log: /dev/stdout
   admin_gui_host: kong.smigula.io
   admin_gui_protocol: https
-  admin_gui_url: https://kong.smigula.io/
+  admin_gui_url: https://manager.kong.smigula.io/
   cluster_data_plane_purge_delay: 60
   cluster_listen: 0.0.0.0:8005
   cluster_telemetry_listen: 0.0.0.0:8006
@@ -115,16 +117,12 @@ env:
   pg_ssl: "off"
   pg_ssl_verify: "off"
   pg_user: postgres
-  pg_password:
-    valueFrom:
-      secretKeyRef:
-        key: pg_host
-        name: kong-config-secret
+  pg_password: Kong363502
   plugins: bundled,openid-connect
   portal: true
   portal_api_access_log: /dev/stdout
   portal_api_error_log: /dev/stdout
-  portal_api_url: https://developer.kong.smigula.io/api
+  portal_api_url: https://api.developer.kong.smigula.io/
   portal_auth: basic-auth
   portal_cors_origins: '*'
   portal_gui_access_log: /dev/stdout
@@ -175,19 +173,21 @@ manager:
   enabled: true
   http:
     containerPort: 8002
-    enabled: false
+    enabled: true
     servicePort: 8002
   ingress:
     annotations:
+      cert-manager.io/acme-challenge-type: http01
+      cert-manager.io/cluster-issuer: letsencrypt-prod
       # nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
     ingressClassName: nginx
     enabled: true
-    hostname: kong.smigula.io
+    hostname: manager.kong.smigula.io
     path: /
-    tls: kong-smigula-io-tls
+    tls: manager-kong-smigula-io
   tls:
     containerPort: 8445
     enabled: true
@@ -208,11 +208,13 @@ portal:
   enabled: true
   http:
     containerPort: 8003
-    enabled: false
+    enabled: true
     servicePort: 8003
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/acme-challenge-type: http01
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      # nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
@@ -220,7 +222,7 @@ portal:
     hostname: developer.kong.smigula.io
     ingressClassName: nginx
     path: /
-    tls: kong-smigula-io-tls
+    tls: developer-kong-smigula-io
   tls:
     containerPort: 8446
     enabled: true
@@ -233,19 +235,21 @@ portalapi:
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   enabled: true
   http:
-    enabled: false
+    enabled: true
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/app-root: /
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+      cert-manager.io/acme-challenge-type: http01
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      # nginx.ingress.kubernetes.io/app-root: /
+      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      # nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
-      nginx.ingress.kubernetes.io/rewrite-target: /
+      # nginx.ingress.kubernetes.io/rewrite-target: /
     enabled: true
     ingressClassName: nginx
-    hostname: developer.kong.smigula.io
-    path: /api
-    tls: kong-smigula-io-tls
+    hostname: api.developer.kong.smigula.io
+    path: /
+    tls: api-developer-kong-smigula-io
   tls:
     containerPort: 8447
     enabled: true
@@ -268,7 +272,17 @@ proxy:
     enabled: true
     # hostPort: 80
   ingress:
-    enabled: false
+    enabled: true
+    annotations:
+      cert-manager.io/acme-challenge-type: http01
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/app-root: /
+      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+      nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    hostname: kong.smigula.io
+    path: /
+    tls: kong-smigula-io
   labels:
     enable-metrics: true
   tls:
