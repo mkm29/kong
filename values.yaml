@@ -9,8 +9,8 @@ admin:
       nginx.ingress.kubernetes.io/app-root: /
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
-      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      # nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /
     enabled: true
     ingressClassName: nginx
     hostname: kong.smigula.io
@@ -181,7 +181,7 @@ manager:
     annotations:
       # nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
     ingressClassName: nginx
     enabled: true
@@ -212,8 +212,8 @@ portal:
     servicePort: 8003
   ingress:
     annotations:
-      # nginx.ingress.kubernetes.io/rewrite-target: /
-      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
     enabled: true
@@ -237,10 +237,10 @@ portalapi:
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/app-root: /
-      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
-      # nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/rewrite-target: /
     enabled: true
     ingressClassName: nginx
     hostname: developer.kong.smigula.io
@@ -265,7 +265,7 @@ proxy:
   enabled: true
   http:
     containerPort: 8080
-    enabled: false
+    enabled: true
     # hostPort: 80
   ingress:
     enabled: false
@@ -282,7 +282,7 @@ status:
   enabled: true
   http:
     containerPort: 8100
-    enabled: false
+    enabled: true
   tls:
     containerPort: 8543
-    enabled: true
+    enabled: false
